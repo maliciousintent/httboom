@@ -1,0 +1,23 @@
+{
+  "name": "httboom",
+  "version": "0.0.2",
+  "description": "httboom =======",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/plasticpanda/httboom.git"
+  },
+  "keywords": [
+    "http",
+    "errors",
+    "connect"
+  ],
+  "author": "Simone Lusenti",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/plasticpanda/httboom/issues"
+  }
+}
