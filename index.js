@@ -49,6 +49,7 @@ module.exports.middleware = function (logger) {
       logger.error('');
             
       if (err.originalError && err.originalError.stack) {
+        logger.error('Original error with stack trace follows:');
         logger.error(err.originalError.stack);
       }
       
