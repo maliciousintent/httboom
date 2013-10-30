@@ -1,6 +1,8 @@
-/*jshint node:true, eqnull:true */
+/*jshint node:true, eqnull:true, laxcomma:true, indent:2 */
 
 'use strict';
+
+require('colors');
 
 var nodeutil = require('util')
   , uuid = require('uuid')
@@ -41,17 +43,23 @@ module.exports.makeDBError = function (originalError) {
 };
 
 
-module.exports.middleware = function (logger) {
+module.exports.middleware = function (logger, additionalLoggingFn) {
   
   return function (err, req, res, next) {
     var errlogid = uuid.v4();
     
-    logger.error('!!! Application Error !!!');
+    logger.error('>');
+    logger.error('> !!! Application Error !!! '.red.inverse.bold);
+    
+    if ('function' === typeof additionalLoggingFn) {
+      additionalLoggingFn(req);
+    }
+    
     logger.error('> Error ID is', errlogid);
     
     if (typeof err.obj === 'object' && err.obj.http != null) {
-      logger.error('>', err.message);
-      logger.error('>', err.debugMsg);
+      logger.error('> User message'.bold, err.message.yellow);
+      logger.error('> System message'.bold, err.debugMsg.red);
       logger.error('>');
             
       if (err.originalError && err.originalError.stack) {

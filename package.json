@@ -1,6 +1,6 @@
 {
   "name": "httboom",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "httboom =======",
   "main": "index.js",
   "scripts": {
@@ -19,5 +19,8 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/plasticpanda/httboom/issues"
+  },
+  "dependencies": {
+    "colors": "~0.6.2"
   }
 }
