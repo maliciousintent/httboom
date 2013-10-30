@@ -24,6 +24,8 @@ module.exports.AppError = AppError;
 module.exports.AppError = AppError;
 
 module.exports.makeAppError = function (httpStatus, name, message, debugMsg, originalError) {
+  if (!debugMsg) debugMsg = message;
+  
   return new AppError(debugMsg, {
     http: httpStatus,
     message: message
