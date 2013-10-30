@@ -8,40 +8,36 @@ var nodeutil = require('util')
   , uuid = require('uuid')
   ;
 
-function AppError(debugMsg, obj, originalError) {
+/* ~ Errors ~ */
+
+module.exports.AppError = AppError;
+module.exports.UserError = UserError;
+
+
+function AppError(httpStatus, name, message, debugMsg, originalError) {
   Error.call(this);
-  this.message = obj.message || '';
-  this.name = 'Application Error';
-  this.obj = obj;
-  this.debugMsg = debugMsg;
+  this.http = httpStatus;
+  this.name = name || 'Application Error';
+  this.message = message || 'No message provided';
+  this.debugMsg = debugMsg || this.message;
   this.originalError = originalError;
 }
+nodeutil.inherits(AppError, Error);
 
 AppError.prototype.toString = function () {
-  return this.debugMsg;
-};
-
-nodeutil.inherits(AppError, Error);
-module.exports.AppError = AppError;
-
-
-module.exports.makeAppError = function (httpStatus, name, message, debugMsg, originalError) {
-  if (!debugMsg) debugMsg = message;
-  
-  return new AppError(debugMsg, {
-    http: httpStatus,
-    message: message
-  }, originalError);
+  return 'Application Error: ' + this.debugMsg;
 };
 
 
-module.exports.makeDBError = function (originalError) {
-  return new AppError('Database error.', {
-    http: 500,
-    message: 'A backend service is not working properly.' // A generic message for the user
-  }, originalError);
-};
 
+function UserError(httpStatus, name, message, debugMsg, originalError) {
+  AppError.apply(this, arguments);
+  this._httboomIsUserError = true;
+}
+nodeutil.inherits(UserError, AppError);
+
+
+/* ~ Middleware ~ */
 
 module.exports.middleware = function (logger, additionalLoggingFn) {
   
@@ -49,7 +45,7 @@ module.exports.middleware = function (logger, additionalLoggingFn) {
     var errlogid = uuid.v4();
     
     logger.error('>');
-    logger.error('> !!! Application Error !!! '.red.inverse.bold);
+    logger.error(('> !!! ' + ((err._httboomIsUserError === true) ? 'User' : 'Application') + ' Error !!! ').red.inverse.bold);
     
     if ('function' === typeof additionalLoggingFn) {
       additionalLoggingFn(req);
@@ -57,7 +53,7 @@ module.exports.middleware = function (logger, additionalLoggingFn) {
     
     logger.error('> Error ID is', errlogid);
     
-    if (typeof err.obj === 'object' && err.obj.http != null) {
+    if (err instanceof AppError || err instanceof UserError) {
       logger.error('> User message'.bold, err.message.yellow);
       logger.error('> System message'.bold, err.debugMsg.red);
       logger.error('>');
@@ -78,7 +74,7 @@ module.exports.middleware = function (logger, additionalLoggingFn) {
       }
     }
     
-    res.render('error', { errlogid: errlogid, message: err.message });
+    res.render('error', { errlogid: errlogid, message: err.message, referer: req.headers.referer, isUserError: (err._httboomIsUserError === true) });
   };
 };
 
