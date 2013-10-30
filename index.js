@@ -78,7 +78,7 @@ module.exports.middleware = function (logger, additionalLoggingFn) {
       }
     }
     
-    res.render('error', { errlogid: errlogid });
+    res.render('error', { errlogid: errlogid, message: err.message });
   };
 };
 
