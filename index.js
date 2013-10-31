@@ -51,9 +51,10 @@ module.exports.middleware = function (logger, additionalLoggingFn) {
       additionalLoggingFn(req);
     }
     
-    logger.error('> Error ID is', errlogid);
+    logger.error('> Incident ID is', errlogid);
     
     if (err instanceof AppError || err instanceof UserError) {
+      logger.error('> Error code'.bold, err.name.red);
       logger.error('> User message'.bold, err.message.yellow);
       logger.error('> System message'.bold, err.debugMsg.red);
       logger.error('>');
