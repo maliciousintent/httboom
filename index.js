@@ -21,6 +21,7 @@ function AppError(httpStatus, name, message, debugMsg, originalError) {
   this.message = message || 'No message provided';
   this.debugMsg = debugMsg || this.message;
   this.originalError = originalError;
+  this._httboomIsBoom = true;
 }
 nodeutil.inherits(AppError, Error);
 
@@ -53,7 +54,7 @@ module.exports.middleware = function (logger, additionalLoggingFn) {
     
     logger.error('> Incident ID is', errlogid);
     
-    if (err instanceof AppError || err instanceof UserError) {
+    if (err._httboomIsBoom === true) {
       logger.error('> Error code'.bold, err.name.red);
       logger.error('> User message'.bold, err.message.yellow);
       logger.error('> System message'.bold, err.debugMsg.red);
