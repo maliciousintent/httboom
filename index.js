@@ -45,7 +45,7 @@ module.exports.middleware = function (logger, additionalLoggingFn) {
     var errlogid = uuid.v4();
     
     logger.error('>');
-    logger.error(('> !!! ' + ((err._httboomIsUserError === true) ? 'User' : 'Application') + ' Error !!! ').red.inverse.bold);
+    logger.error('>', ('' + ((err._httboomIsUserError === true) ? ' !!! User Error !!! '.yellow.inverse.bold : ' !!! Application Error !!! ').red.inverse.bold));
     
     if ('function' === typeof additionalLoggingFn) {
       additionalLoggingFn(req);
@@ -64,18 +64,38 @@ module.exports.middleware = function (logger, additionalLoggingFn) {
         logger.error(err.originalError.stack);
         logger.error('>');
       }
-    } else {
-      logger.error('>', 'middleware received an error that cannot be parsed.');
       
-      if ('production' === process.NODE_ENV) {
-        logger.error('>', nodeutil.inspect(err));
-      } else {
-        next(err);
+      if (err._httboomIsUserError === true && 'function' === typeof req.flash) {
+        logger.error('>', 'error handled with req.flash, redirecting user to', req.headers.referer);
+        req.flash('error', err.message);
+        res.redirect(req.headers.referer || '/');
         return;
       }
+      
+    } else {
+      logger.error('>', 'middleware received an error that cannot be parsed');
+      logger.error('>', '(err.message will be cleaned up to prevent leaking)');
+      logger.error('>', err.message, err.stack);
+      
+      err.message = 'General error';
     }
     
-    res.render('error', { errlogid: errlogid, message: err.message, referer: req.headers.referer, isUserError: (err._httboomIsUserError === true) });
+    
+    var e_for_user = { errlogid: errlogid, message: err.message, referer: req.headers.referer, isUserError: (err._httboomIsUserError === true) };
+    
+    if (req.headers.accept.indexOf('html') > -1) {
+      res.render('error', e_for_user);
+      logger.error('>', 'response rendered as HTML');
+      
+    } else if (req.headers.accept.indexOf('json') > -1) {
+      res.json(e_for_user);
+      logger.error('>', 'response rendered as JSON');
+      
+    } else {
+      res.setHeader('Content-type', 'text/plain');
+      res.end(e_for_user.message + ' - ' + e_for_user.errlogid);
+      logger.error('>', 'response rendered as text/plain');
+      
+    }
   };
 };
-
