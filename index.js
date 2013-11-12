@@ -66,13 +66,6 @@ module.exports.middleware = function (logger, additionalLoggingFn) {
         logger.error('>');
       }
       
-      if (err._httboomIsUserError === true && 'function' === typeof req.flash) {
-        logger.error('>', 'error handled with req.flash, redirecting user to', req.headers.referer);
-        req.flash('error', err.message);
-        res.redirect(req.headers.referer || '/');
-        return;
-      }
-      
     } else {
       logger.error('>', 'middleware received an error that cannot be parsed');
       logger.error('>', '(err.message will be cleaned up to prevent leaking)');
@@ -85,8 +78,15 @@ module.exports.middleware = function (logger, additionalLoggingFn) {
     var e_for_user = { errlogid: errlogid, message: err.message, referer: req.headers.referer, isUserError: (err._httboomIsUserError === true) };
     
     if (req.headers.accept.indexOf('html') > -1) {
-      res.render('error', e_for_user);
-      logger.error('>', 'response rendered as HTML');
+      if (err._httboomIsUserError === true && 'function' === typeof req.flash) {
+        logger.error('>', 'error handled with req.flash, redirecting user to', req.headers.referer);
+        req.flash('error', err.message);
+        res.redirect(req.headers.referer || '/');
+        
+      } else {
+        res.render('error', e_for_user);
+        logger.error('>', 'response rendered as HTML');
+      }
       
     } else if (req.headers.accept.indexOf('json') > -1) {
       res.json(e_for_user);
