@@ -23,5 +23,10 @@
   "dependencies": {
     "colors": "~0.6.2",
     "uuid": "~1.4.1"
+  },
+  "devDependencies": {
+    "connect": "~2.11.0",
+    "coolog": "~3.0.0",
+    "coolog-appender-logentries": "~0.1.0"
   }
 }

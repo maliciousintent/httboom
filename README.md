@@ -1,4 +1,4 @@
-![Boom](http://i.imgur.com/hySC1bc.png)
+![Boom](http://i.imgur.com/YlgyXmF.png)
 =======
 
 HTTP-friendly errors for connect
