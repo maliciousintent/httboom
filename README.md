@@ -1,5 +1,9 @@
 ![Boom](http://i.imgur.com/YlgyXmF.png)
 ### HTTP-friendly errors for connect (and express)
+[![Build Status](https://travis-ci.org/plasticpanda/httboom.png?branch=master)](https://travis-ci.org/plasticpanda/httboom)
+[![Dependency Status](https://david-dm.org/plasticpanda/httboom.png)](https://david-dm.org/plasticpanda/httboom)
+[![devDependency Status](https://david-dm.org/plasticpanda/httboom/dev-status.png)](https://david-dm.org/plasticpanda/httboom#info=devDependencies)
+
 
 This library is made of the following components:
 
