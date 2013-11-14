@@ -97,6 +97,8 @@ module.exports.middleware = function (logger, additionalLoggingFn) {
     };
     
     if (req.headers.accept.indexOf('html') > -1) {
+      res.setHeader('Content-type', 'text/html');
+      
       if (err._httboomIsUserError === true && 'function' === typeof req.flash) {
         logger.error('>', 'error handled with req.flash, redirecting user to', return_to);
         req.flash('error', err.message);
