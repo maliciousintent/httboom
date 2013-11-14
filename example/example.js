@@ -5,6 +5,7 @@
 var httboom = require('../')
   , coolog = require('coolog')
   , coolog_logentries = require('coolog-appender-logentries')(process.env.LOGENTRIES_APIKEY)
+  , expressSucks = require('expresssucks').expressSucks
   , connect = require('connect')
   ;
 
@@ -15,6 +16,7 @@ var that = 'foo';
 var logger = coolog.logger('example.js')
   , app = connect()
   .use(connect.logger('dev'))
+  .use(expressSucks())
   .use(function (req, res, next) {
     next(new httboom.AppError(
       500,

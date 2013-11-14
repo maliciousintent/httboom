@@ -74,7 +74,8 @@ else
 
 ## Examples
 
-See ```examples/example.js``` for a working example (you'll need to set a ```LOGENTRIES_APIKEY``` env variable).
+See ```examples/example.js``` for a working example (you'll need to set a ```LOGENTRIES_APIKEY``` env variable).  
+Before running the examples you should install module's *dev dependencies*.
 
 
 ## License

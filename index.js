@@ -90,6 +90,7 @@ module.exports.middleware = function (logger, additionalLoggingFn) {
     
     error_for_user = {
       errlogid: errlogid
+    , status: err.http || 500
     , message: err.message
     , referer: return_to
     , isUserError: (err._httboomIsUserError === true)
@@ -102,15 +103,26 @@ module.exports.middleware = function (logger, additionalLoggingFn) {
         res.redirect(return_to || '/');
         
       } else {
-        res.render('error', error_for_user);
-        logger.error('>', 'response rendered as HTML');
+        try {
+          res.statusCode = error_for_user.status;
+          res.render('error', error_for_user);
+          logger.error('>', 'response rendered as HTML');
+        } catch (e) {
+          res.statusCode = error_for_user.status;
+          res.write('<html lang="en"><head><meta charset="utf-8"></head><body><p>Application Error: ' + error_for_user.message + '.<br />Error ID: ' + error_for_user.errlogid + '</p></body></html>', 'utf8');
+          res.end();
+          logger.error('>', 'response rendered as HTML. No error.jade template provided.');
+        }
+        
       }
       
     } else if (req.headers.accept.indexOf('json') > -1) {
+      res.statusCode = error_for_user.status;
       res.json(error_for_user);
       logger.error('>', 'response rendered as JSON');
       
     } else {
+      res.statusCode = error_for_user.status;
       res.setHeader('Content-type', 'text/plain');
       res.end(error_for_user.message + ' - ' + error_for_user.errlogid);
       logger.error('>', 'response rendered as text/plain');
