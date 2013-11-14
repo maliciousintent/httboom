@@ -7,6 +7,8 @@ var request = require('superagent')
   , assert = require('assert')
   ;
 
+require('./server')();
+
 
 describe('httboom.middleware()', function () {
   var app
