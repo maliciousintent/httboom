@@ -26,11 +26,11 @@
     "node-swallow": "0.0.5"
   },
   "devDependencies": {
-    "connect": "~2.11.0",
+    "connect": "~2.11.2",
     "coolog": "~3.0.0",
-    "coolog-appender-logentries": "~0.1.0",
+    "coolog-appender-logentries": "~0.2.0",
     "expresssucks": "~0.2.2",
     "superagent": "~0.15.7",
-    "mocha": "~1.14.0"
+    "mocha": "~1.15.1"
   }
 }

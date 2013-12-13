@@ -1,5 +1,17 @@
 ![Boom](http://i.imgur.com/YlgyXmF.png)
 ### HTTP-friendly errors for connect (and express)
+[![NPM version](https://badge.fury.io/js/httboom.png)](http://badge.fury.io/js/httboom)
+[![Build Status](https://travis-ci.org/plasticpanda/httboom.png?branch=master)](https://travis-ci.org/plasticpanda/httboom)
+[![Dependency Status](https://david-dm.org/plasticpanda/httboom.png)](https://david-dm.org/plasticpanda/httboom)
+[![devDependency Status](https://david-dm.org/plasticpanda/httboom/dev-status.png)](https://david-dm.org/plasticpanda/httboom#info=devDependencies)
+
+## Install
+
+[![NPM](https://nodei.co/npm/httboom.png?compact=true)](https://nodei.co/npm/httboom/)
+
+
+## Abstract
+
 
 This library is made of the following components:
 
