@@ -96,7 +96,7 @@ module.exports.middleware = function (logger, additionalLoggingFn) {
     , isUserError: (err._httboomIsUserError === true)
     };
     
-    if (req.headers.accept.indexOf('html') > -1) {
+    if (req.headers.accept && req.headers.accept.indexOf('html') > -1) {
       res.setHeader('Content-type', 'text/html');
       
       if (err._httboomIsUserError === true && 'function' === typeof req.flash) {
@@ -118,7 +118,7 @@ module.exports.middleware = function (logger, additionalLoggingFn) {
         
       }
       
-    } else if (req.headers.accept.indexOf('json') > -1) {
+    } else if (req.headers.accept && req.headers.accept.indexOf('json') > -1) {
       res.statusCode = error_for_user.status;
       res.json(error_for_user);
       logger.error('>', 'response rendered as JSON');
